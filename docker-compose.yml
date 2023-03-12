@@ -1,0 +1,34 @@
+version: '3.8'
+services:
+  mysns-mysql-service:
+    image: mysql:8.0.32
+    container_name: mysns-mysql-container
+    ports:
+      - 3307:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=AdminDef
+      - MYSQL_DATABASE=mysns
+    volumes:
+      - ./initdb:/docker-entrypoint-initdb.d:rw
+      - mysql-mysns-data:/var/lib/mysql
+      - mysql-config:/etc/mysql/conf.d
+    networks:
+      - backend
+  mysns-app-service:
+    image: mysns
+    container_name: mysns-app-container
+    ports:
+      - 8081:8081
+    volumes:
+      - ./:/app
+    networks:
+      - backend
+networks:
+  backend:
+    name: mysns-network
+volumes:
+  mysql-mysns-data:
+  mysql-config:
+  initdb:
+
+
